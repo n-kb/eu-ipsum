@@ -1,0 +1,144 @@
+<html>
+	<head>
+		<title>
+			EU-ipsum generator
+		</title>
+		<style>
+			h1 {
+				text-align: center;
+				width: 100%;
+			}
+			.highlight {
+				font-size: 1.5em;
+				width: 100%;
+			}
+
+			#ipsum {
+				font-size: .8em;
+				background-color: #eee;
+				padding: .5em;
+				margin: 1em;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>EU-ipsum generator</h1>
+		<p class="highlight">Create text for your EU reports faster than ever! The EU-ipsum generator lets you create as much content as you want for your next deliverable to the European Commission, for your next policy analysis or your next internal report.</p>
+		<h2>How much senseless EU-text do you want?</h2>
+		<div class="buttons">
+			<button onclick="document.getElementById('ipsum').innerHTML = make_paragraphs(100)">A little</button>
+			<button onclick="document.getElementById('ipsum').innerHTML = make_paragraphs(200)">A bit more</button>
+			<button onclick="document.getElementById('ipsum').innerHTML = make_paragraphs(500)">The whole thing</button>
+		</div>
+
+		<div id="ipsum">
+		</div>
+	</body>
+
+</html>
+
+
+<script>
+var nouns = ["policy", "research", "efficiency", "public", "support",  "information", "stakeholders", "growth", "products", "programme", "work", "proposals", "investment", "Commission", "data", "innovation", "development", "member", "number", "EU", "business", "management", "measure", "Member State", "capacity", "action", "ratio", "area", "sector", "conditions", "risk", "order", "challenge", "level", "remuneration", "energy", "fraud", "government", "rate", "project", "contribution", "implementation", "policies", "Council", "knowledge"]
+var adjectives = ["European", "innovative", "efficient", "public", "variable", "financial", "specific", "sustainable", "economic", "local", "general", "different", "foreign", "relevant", "potential", "certain", "international"]
+var verbs = ["used", "proposed", "identified", "included", "made", "functioned", "provided", "increased", "needed", "retrieved", "called upon", "allowed", "earned", "worked", "contributed to", "implemented", "based", "followed"]
+var prepositions = ["from", "to", "as", "only"]
+var pronouns = ["the", "this", "that"]
+var transitions = [", ", ": ", " and "]
+
+// Takes an element at random
+function get_element(array) {
+	for (var i = 0; i <= array.length; i++) {
+		if (Math.random() > 1 - .05 * ((array.length - i) / array.length)){
+			return array[i]
+		}
+	}
+
+	// In case nothing was returned
+	return array[Math.floor(Math.random() * array.length)]
+}
+
+// Creates a nominal group
+function get_nominal_group() {
+	var text = ""
+
+	// Finds a preposition
+	if (Math.random() > .9){
+		text += get_element(prepositions) + " "
+	}
+
+	// Finds a pronouns
+	text += get_element(pronouns) + " "
+
+	// Finds an adjective
+	if (Math.random() > .5){
+		text += get_element(adjectives) + " "
+	}
+
+	// Another one
+	if (Math.random() > .9){
+		text += get_element(adjectives) +  " "
+	}
+
+	// and the noun
+	text += get_element(nouns) + " "
+
+	return text
+
+}
+
+function make_sentence() {
+	var text = ""
+
+	// The subject
+	text += get_nominal_group()
+
+	// The verb
+	text += get_element(verbs) + " "
+
+	// The complement
+	if (Math.random() > .2){
+		text += get_nominal_group()
+	}
+
+	// And another proposition
+	if (Math.random() > .6){
+
+		// removes trailing white space
+		text = text.trim()
+
+		text += get_element(transitions)  + get_nominal_group() + get_element(verbs) + " " + get_nominal_group()
+	}
+
+	// Just in case
+	text = text.trim()
+
+	// Capitalizes first letter
+	text = text.charAt(0).toUpperCase() + text.slice(1)
+
+	// Adds a final .
+	text += "."
+
+	return text
+}
+
+function make_paragraphs(amount) {
+	
+	var text = "<p>"
+
+	for (var i=0; i<=amount; i++) {
+		text += make_sentence() + " "
+
+		if (Math.random() > .95){
+			text += "</p><p>"
+		}
+	}
+
+	text += "</p>"
+
+	return text
+
+}
+
+document.getElementById("ipsum").innerHTML = make_paragraphs(100)
+</script>
